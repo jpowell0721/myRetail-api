@@ -1,7 +1,9 @@
 package com.jared.myRetailapi.model;
 
 import lombok.Data;
+import lombok.NonNull;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Map;
@@ -16,6 +18,7 @@ import java.util.Map;
 public class Product {
 
     @Id
+    @NonNull
     private String id;
     private String name;
     public Map<String,String> currentPrice;

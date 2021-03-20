@@ -33,7 +33,6 @@ public class DatabaseSeeder {
 
         Product product = new Product("13860428", "", currentPrice);
 
-
         //purge previous data
         this.productRepository.deleteAll();
 

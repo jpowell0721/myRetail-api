@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * @author jaredpowell
  */
-@ResponseStatus(value= HttpStatus.NOT_FOUND, reason="not")
+@ResponseStatus(value= HttpStatus.NOT_FOUND, reason="not found")
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException() {
         super();

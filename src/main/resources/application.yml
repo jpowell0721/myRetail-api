@@ -3,6 +3,6 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: productdb
+      database: test
 server:
   port: ${PORT:8080}

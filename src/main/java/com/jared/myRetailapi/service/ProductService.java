@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface ProductService {
     Product findByProductId(String id) throws JsonProcessingException;
-    public void saveProductPrice(Product product);
+    Product saveProductPrice(Product product);
 
 }

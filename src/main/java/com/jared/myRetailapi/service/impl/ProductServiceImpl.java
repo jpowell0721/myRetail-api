@@ -5,6 +5,8 @@ import com.jared.myRetailapi.repository.ProductRepository;
 import com.jared.myRetailapi.service.ProductService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * @author jaredpowell
  */
@@ -18,12 +20,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findByProductId(String id) {
-        return productRepository.getProductById(id);
+    public Optional<Product> findById(String id){
+        return productRepository.findById(id);
     }
 
     @Override
-    public Product saveProductPrice(Product product) {
+    public Product save(Product product) {
         return productRepository.save(product);
     }
 }

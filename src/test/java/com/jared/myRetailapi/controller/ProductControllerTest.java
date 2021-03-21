@@ -10,10 +10,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.util.Optional;
 
+import static com.jared.myRetailapi.Helper.TEST_CURRENCY_CODE;
+import static com.jared.myRetailapi.Helper.TEST_ID;
+import static com.jared.myRetailapi.Helper.TEST_NAME;
+import static com.jared.myRetailapi.Helper.TEST_VALUE;
+import static com.jared.myRetailapi.Helper.createMockProduct;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -21,12 +25,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.is;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class ProductControllerTest {
+    private String URI_TEMPLATE = "/api/v1/products/{id}";
+
+    private Product product;
+
     @MockBean
     private ProductService productService;
 
@@ -37,30 +42,35 @@ class ProductControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void testGetProductByProductId_Found() throws Exception {
-        Map<String,String> currentPrice = new HashMap<>();
-        currentPrice.put("value", "50");
-        currentPrice.put("currency_code", "USD");
-        Product product = new Product("123", "test", currentPrice);
+    void testGetProductByProductId_IdFound() throws Exception {
+        product = createMockProduct();
 
-        doReturn(Optional.of(product)).when(productService).findById("123");
-        doReturn("test").when(redSkyService).findNameById("123");
+        doReturn(Optional.of(product)).when(productService).findById(TEST_ID);
+        doReturn(TEST_NAME).when(redSkyService).findNameById(TEST_ID);
 
-        RequestBuilder requestBuilder = null;
-        mockMvc.perform(get("/api/v1/products/{id}", "123"))
+        mockMvc.perform(get(URI_TEMPLATE, TEST_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is("123")))
-                .andExpect(jsonPath("$.name", is("test")))
-                .andExpect(jsonPath("$.currentPrice.value", is("50")))
-                .andExpect(jsonPath("$.currentPrice.currency_code", is("USD")));
+                .andExpect(jsonPath("$.id", is(TEST_ID)))
+                .andExpect(jsonPath("$.name", is(TEST_NAME)))
+                .andExpect(jsonPath("$.currentPrice.value", is(TEST_VALUE)))
+                .andExpect(jsonPath("$.currentPrice.currency_code", is(TEST_CURRENCY_CODE)));
     }
 
     @Test
-    void testGetProductByProductId_NotFound() throws Exception {
-        doReturn(Optional.empty()).when(productService).findById("123");
+    void testGetProductByProductId_IdNotFound() throws Exception {
+        doReturn(Optional.empty()).when(productService).findById(TEST_ID);
 
-        mockMvc.perform(get("/api/v1/products/{id}", "123"))
+        mockMvc.perform(get(URI_TEMPLATE, TEST_ID))
                 .andExpect(status().isNotFound());
+    }
+
+    //TODO: Finish implementing this test
+    //TODO: Implement RedSkyServie tests
+    @Test
+    void testUpdateProductPrice_IdFound() throws Exception {
+        product = createMockProduct();
+
+
     }
 }

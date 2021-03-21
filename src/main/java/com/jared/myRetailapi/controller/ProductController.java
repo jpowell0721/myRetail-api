@@ -55,6 +55,6 @@ public class ProductController {
 
         productService.save(product);
 
-        return new ResponseEntity<>("saved", HttpStatus.OK);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 }

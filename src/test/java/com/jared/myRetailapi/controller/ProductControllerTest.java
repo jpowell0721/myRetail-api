@@ -6,15 +6,12 @@ import com.jared.myRetailapi.service.ProductService;
 import com.jared.myRetailapi.service.RedSkyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.security.auth.login.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -96,6 +93,5 @@ class ProductControllerTest {
                 .andExpect(jsonPath("$.name", is(TEST_NAME)))
                 .andExpect(jsonPath("$.currentPrice.value", is("500")))
                 .andExpect(jsonPath("$.currentPrice.currency_code", is(TEST_CURRENCY_CODE)));
-
     }
 }

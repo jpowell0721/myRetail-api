@@ -46,6 +46,12 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * ReST endpoint to update {@link Product}
+     * @param id - productId to search by
+     * @param product - JSON document with updated fields
+     * @return
+     */
     @PutMapping(value="/{id}", produces = "application/json")
     public ResponseEntity<?> updateProductPrice(@PathVariable("id") String id, @RequestBody Product product) {
         Optional<Product> existingProduct = productService.findById(id);

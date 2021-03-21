@@ -49,6 +49,6 @@ To run unit tests, navigate to the folder you cloned the project in and type './
 To run the project and start the embedded tomcat server, type './mvnw spring-boot:run'
 
 # Example Postman queries and returns. 
-[Successful GET request](docs/get_success.png)
+[Successful GET request](get_success.png)
 
 

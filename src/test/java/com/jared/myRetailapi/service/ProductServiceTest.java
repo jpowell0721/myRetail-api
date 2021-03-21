@@ -3,6 +3,7 @@ package com.jared.myRetailapi.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jared.myRetailapi.model.Product;
 import com.jared.myRetailapi.repository.ProductRepository;
+import com.jared.myRetailapi.repository.RedSkyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,27 +33,30 @@ class ProductServiceTest {
     @MockBean
     ProductRepository productRepository;
 
+    @MockBean
+    RedSkyRepository redSkyRepository;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testFindByProductId_IdExists() throws JsonProcessingException {
+    public void testFindById_IdExists() throws JsonProcessingException {
         product = createMockProduct();
 
-        doReturn(product).when(productRepository).getProductById(TEST_ID);
+        doReturn(Optional.of(product)).when(productRepository).findById(TEST_ID);
 
-        assertEquals(productService.findByProductId(TEST_ID), product);
+        Optional<Product> testProduct = productService.findById(TEST_ID);
+        assertEquals(testProduct, Optional.of(product));
     }
 
     @Test
-    public void testFindByProductId_IdDoesNotExist() throws JsonProcessingException {
-        product = createMockProduct();
+    public void testFindById_IdDoesNotExist() throws JsonProcessingException {
+        doReturn(Optional.empty()).when(productRepository).findById(TEST_ID);
+        Optional<Product> testProduct = productService.findById(TEST_ID);
 
-        doReturn(product).when(productRepository).getProductById(TEST_ID);
-
-        assertNotEquals(productService.findByProductId("incorrect_id"), product);
+        assertFalse(testProduct.isPresent());
     }
 
     @Test
@@ -60,7 +65,7 @@ class ProductServiceTest {
 
         doReturn(product).when(productRepository).save(any());
 
-        Product newProduct = productService.saveProductPrice(product);
+        Product newProduct = productService.save(product);
 
         assertEquals(newProduct.getCurrentPrice(), product.getCurrentPrice());
     }

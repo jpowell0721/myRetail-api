@@ -7,11 +7,14 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
+/**
+ * @author jaredpowell
+ *
+ * Class for seeding data to MongoDB
+ */
 @Component
 public class DatabaseSeeder {
     private ProductRepository productRepository;

@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import sun.security.provider.certpath.OCSPResponse;
 
-import javax.swing.text.html.Option;
-
+/**
+ * @author jaredpowell
+ */
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -40,9 +39,9 @@ public class ProductController {
             product = productService.findByProductId(id);
             product.setName(redSkyRepository.getProductTitleById(id));
         } catch (ResourceNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Foundddd", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found", e);
         } catch (JsonProcessingException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Foundddd", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found", e);
         }
         return new ResponseEntity<Product>(product, HttpStatus.OK);
     }

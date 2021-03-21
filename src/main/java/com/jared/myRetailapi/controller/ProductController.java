@@ -20,16 +20,14 @@ import org.springframework.web.server.ResponseStatusException;
  * @author jaredpowell
  */
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/v1/products")
 public class ProductController {
 
     private ProductService productService;
-    private RedSkyRepository redSkyRepository;
 
     @Autowired
-    public void setProductService(ProductService productService, RedSkyRepository redSkyRepository) {
+    public void setProductService(ProductService productService) {
         this.productService = productService;
-        this.redSkyRepository = redSkyRepository;
     }
 
     @GetMapping(value="/{id}")
@@ -37,7 +35,6 @@ public class ProductController {
         Product product;
         try {
             product = productService.findByProductId(id);
-            product.setName(redSkyRepository.getProductTitleById(id));
         } catch (ResourceNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found", e);
         } catch (JsonProcessingException e) {

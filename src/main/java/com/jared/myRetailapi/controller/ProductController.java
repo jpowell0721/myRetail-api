@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 /**
  * @author jaredpowell
  */
@@ -36,20 +38,23 @@ public class ProductController {
                 .map(product -> {
                     try {
                         product.setName(redSkyService.findNameById(id));
-                        return ResponseEntity
-                                .ok()
-                                .body(product);
+                        return new ResponseEntity<>(product, HttpStatus.OK);
                     } catch (JsonProcessingException e) {
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                     }
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping(value="/{id}", produces = "application/json")
-    public ResponseEntity<String> updateProductPrice(@PathVariable("id") String id, @RequestBody Product product) {
+    public ResponseEntity<?> updateProductPrice(@PathVariable("id") String id, @RequestBody Product product) {
+        Optional<Product> existingProduct = productService.findById(id);
+        if(!existingProduct.isPresent()) {
+            return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
+        }
+
         productService.save(product);
 
-        return new ResponseEntity<String>("saved", HttpStatus.OK);
+        return new ResponseEntity<>("saved", HttpStatus.OK);
     }
 }

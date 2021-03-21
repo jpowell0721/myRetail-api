@@ -3,16 +3,19 @@ package com.jared.myRetailapi.service.impl;
 import com.jared.myRetailapi.model.Product;
 import com.jared.myRetailapi.repository.ProductRepository;
 import com.jared.myRetailapi.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
+/**
+ * @author jaredpowell
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    @Autowired
     private ProductRepository productRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @Override
     public Product findByProductId(String id) {
@@ -20,8 +23,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void saveProductPrice(Product product) {
-        productRepository.save(product);
+    public Product saveProductPrice(Product product) {
+        return productRepository.save(product);
     }
 }
 

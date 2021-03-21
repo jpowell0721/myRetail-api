@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @DataMongoTest
 class MyRetailApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+  @Test
+  void contextLoads() {}
 }

@@ -1,5 +1,6 @@
 package com.jared.myRetailapi.seeder;
 
+import com.jared.myRetailapi.model.CurrentPrice;
 import com.jared.myRetailapi.model.Product;
 import com.jared.myRetailapi.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,38 +8,33 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author jaredpowell
- *
- * Class for seeding data to MongoDB
+ *     <p>Class for seeding data to MongoDB
  */
 @Component
 public class DatabaseSeeder {
-    private ProductRepository productRepository;
 
-    @Autowired
-    public DatabaseSeeder(ProductRepository productRepository){
-        this.productRepository = productRepository;
-    }
+  private ProductRepository productRepository;
 
-    @EventListener
-    public void seed(ContextRefreshedEvent event) {
-        seedProductTable();
-    }
+  @Autowired
+  public DatabaseSeeder(ProductRepository productRepository) {
+    this.productRepository = productRepository;
+  }
 
-    public void seedProductTable() {
-        Map<String,String> currentPrice = new HashMap<>();
-        currentPrice.put("value", "50");
-        currentPrice.put("currency_code", "USD");
+  @EventListener
+  public void seed(ContextRefreshedEvent event) {
+    seedProductTable();
+  }
 
-        Product product = new Product("13860428", "", currentPrice);
+  public void seedProductTable() {
+    CurrentPrice currentPrice = new CurrentPrice("50", "USD");
 
-        //purge previous data
-        this.productRepository.deleteAll();
+    Product product = new Product("13860428", "", currentPrice);
 
-        this.productRepository.save(product);
-    }
+    // purge previous data
+    this.productRepository.deleteAll();
+
+    this.productRepository.save(product);
+  }
 }

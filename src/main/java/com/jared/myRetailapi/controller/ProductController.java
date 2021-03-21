@@ -16,51 +16,46 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-/**
- * @author jaredpowell
- */
+/** @author jaredpowell */
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
-    private ProductService productService;
-    private RedSkyService redSkyService;
+  private ProductService productService;
+  private RedSkyService redSkyService;
 
-    @Autowired
-    public void setProductService(ProductService productService, RedSkyService redSkyService) {
-        this.productService = productService;
-        this.redSkyService = redSkyService;
+  @Autowired
+  public void setProductService(ProductService productService, RedSkyService redSkyService) {
+    this.productService = productService;
+    this.redSkyService = redSkyService;
+  }
+
+  @GetMapping(value = "/{id}")
+  public ResponseEntity<?> getProductByProductId(@PathVariable("id") String id) {
+    return productService
+        .findById(id)
+        .map(
+            product -> {
+              try {
+                product.setName(redSkyService.findNameById(id));
+                return new ResponseEntity<>(product, HttpStatus.OK);
+              } catch (JsonProcessingException e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+              }
+            })
+        .orElse(ResponseEntity.notFound().build());
+  }
+
+  @PutMapping(value = "/{id}", produces = "application/json")
+  public ResponseEntity<?> updateProductPrice(
+      @PathVariable("id") String id, @RequestBody Product product) {
+    Optional<Product> existingProduct = productService.findById(id);
+    if (!existingProduct.isPresent()) {
+      return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value="/{id}")
-    public ResponseEntity<?> getProductByProductId(@PathVariable("id") String id) {
-        return productService.findById(id)
-                .map(product -> {
-                    try {
-                        product.setName(redSkyService.findNameById(id));
-                        return new ResponseEntity<>(product, HttpStatus.OK);
-                    } catch (JsonProcessingException e) {
-                        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
+    productService.save(product);
 
-    /**
-     * ReST endpoint to update {@link Product}
-     * @param id - productId to search by
-     * @param product - JSON document with updated fields
-     * @return
-     */
-    @PutMapping(value="/{id}", produces = "application/json")
-    public ResponseEntity<?> updateProductPrice(@PathVariable("id") String id, @RequestBody Product product) {
-        Optional<Product> existingProduct = productService.findById(id);
-        if(!existingProduct.isPresent()) {
-            return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
-        }
-
-        productService.save(product);
-
-        return new ResponseEntity<>(product, HttpStatus.OK);
-    }
+    return new ResponseEntity<>(product, HttpStatus.OK);
+  }
 }

@@ -20,47 +20,45 @@ import static com.jared.myRetailapi.Helper.TEST_ID;
 
 @SpringBootTest
 class ProductServiceTest {
-    private Product product;
+  private Product product;
 
-    @Autowired
-    ProductService productService;
+  @Autowired ProductService productService;
 
-    @MockBean
-    ProductRepository productRepository;
+  @MockBean ProductRepository productRepository;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+  @BeforeEach
+  public void setUp() {
+    MockitoAnnotations.openMocks(this);
+  }
 
-    @Test
-    public void testFindById_IdExists() {
-        product = createMockProduct();
+  @Test
+  public void testFindById_IdExists() {
+    product = createMockProduct();
 
-        doReturn(Optional.of(product)).when(productRepository).findById(TEST_ID);
+    doReturn(Optional.of(product)).when(productRepository).findById(TEST_ID);
 
-        Optional<Product> testProduct = productService.findById(TEST_ID);
+    Optional<Product> testProduct = productService.findById(TEST_ID);
 
-        assertEquals(testProduct, Optional.of(product));
-    }
+    assertEquals(testProduct, Optional.of(product));
+  }
 
-    @Test
-    public void testFindById_IdDoesNotExist() {
-        doReturn(Optional.empty()).when(productRepository).findById(TEST_ID);
+  @Test
+  public void testFindById_IdDoesNotExist() {
+    doReturn(Optional.empty()).when(productRepository).findById(TEST_ID);
 
-        Optional<Product> testProduct = productService.findById(TEST_ID);
+    Optional<Product> testProduct = productService.findById(TEST_ID);
 
-        assertFalse(testProduct.isPresent());
-    }
+    assertFalse(testProduct.isPresent());
+  }
 
-    @Test
-    public void testSaveProductPrice() {
-        product = createMockProduct();
+  @Test
+  public void testSaveProductPrice() {
+    product = createMockProduct();
 
-        doReturn(product).when(productRepository).save(any());
+    doReturn(product).when(productRepository).save(any());
 
-        Product newProduct = productService.save(product);
+    Product newProduct = productService.save(product);
 
-        assertEquals(newProduct.getCurrentPrice(), product.getCurrentPrice());
-    }
+    assertEquals(newProduct.getCurrentPrice(), product.getCurrentPrice());
+  }
 }

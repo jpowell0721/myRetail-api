@@ -4,10 +4,9 @@ import com.jared.myRetailapi.model.Product;
 
 import java.util.Optional;
 
-/**
- * @author jaredpowell
- */
+/** @author jaredpowell */
 public interface ProductService {
-    Optional<Product> findById(String id);
-    Product save(Product product);
+  Optional<Product> findById(String id);
+
+  Product save(Product product);
 }

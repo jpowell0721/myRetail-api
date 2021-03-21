@@ -5,26 +5,21 @@ import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Map;
-
 /**
  * @author jaredpowell
- *
- * Utilize lombok in order to cut down on boilerplate code
+ *     <p>Utilize lombok in order to cut down on boilerplate code
  */
 @Data
-@Document(collection="products")
+@Document(collection = "products")
 public class Product {
 
-    @Id
-    @NonNull
-    private String id;
-    private String name;
-    public Map<String,String> currentPrice;
+  @Id @NonNull private String id;
+  private String name;
+  public CurrentPrice currentPrice;
 
-    public Product(String id, String name, Map<String,String> currentPrice) {
-        this.id = id;
-        this.name = name;
-        this.currentPrice = currentPrice;
-    }
+  public Product(String id, String name, CurrentPrice currentPrice) {
+    this.id = id;
+    this.name = name;
+    this.currentPrice = currentPrice;
+  }
 }

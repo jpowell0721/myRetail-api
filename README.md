@@ -50,5 +50,7 @@ To run the project and start the embedded tomcat server, type './mvnw spring-boo
 
 # Example Postman queries and returns. 
 [Successful GET request](images/get_success.png)
+[Successful PUT request](images/successful_put.png)
+[Passing unit tests](images/passing_unit_tests.png)
 
 

@@ -11,6 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
+import static com.jared.myRetailapi.Helper.TEST_VALUE;
+import static com.jared.myRetailapi.Helper.UPDATED_TEST_VALUE;
 import static com.jared.myRetailapi.Helper.createMockProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -62,5 +64,16 @@ class ProductServiceTest {
     assertEquals(newProduct.getCurrentPrice(), product.getCurrentPrice());
   }
 
+  @Test
+  public void testUpdateProductPrice() {
+    product = createMockProduct();
 
+    doReturn(Optional.of(product)).when(productRepository).findById(TEST_ID);
+
+    assertEquals(product.currentPrice.getValue(), TEST_VALUE);
+
+    productService.updateProductPrice(TEST_ID, UPDATED_TEST_VALUE);
+
+    assertEquals(product.currentPrice.getValue(), UPDATED_TEST_VALUE);
+  }
 }

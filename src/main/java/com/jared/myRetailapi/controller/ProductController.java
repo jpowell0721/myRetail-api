@@ -54,8 +54,9 @@ public class ProductController {
       return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
     }
 
-    productService.save(product);
+    // ensure we only update the price
+    productService.updateProductPrice(product.getId(), product.currentPrice.getValue());
 
-    return new ResponseEntity<>(product, HttpStatus.OK);
+    return new ResponseEntity<>(productService.findById(id), HttpStatus.OK);
   }
 }

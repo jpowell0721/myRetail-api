@@ -61,4 +61,6 @@ class ProductServiceTest {
 
     assertEquals(newProduct.getCurrentPrice(), product.getCurrentPrice());
   }
+
+
 }

@@ -26,4 +26,12 @@ public class ProductServiceImpl implements ProductService {
   public Product save(Product product) {
     return productRepository.save(product);
   }
+
+  @Override
+  public void updateProductPrice(String id, String value) {
+    Optional<Product> product = productRepository.findById(id);
+    product.get().currentPrice.setValue(value);
+
+    productRepository.save(product.get());
+  }
 }

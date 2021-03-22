@@ -21,7 +21,6 @@ import static com.jared.myRetailapi.Helper.TEST_ID;
 import static com.jared.myRetailapi.Helper.TEST_NAME;
 import static com.jared.myRetailapi.Helper.TEST_VALUE;
 import static com.jared.myRetailapi.Helper.createMockProduct;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -78,8 +77,7 @@ class ProductControllerTest {
 
     Product updatedProduct = new Product(TEST_ID, TEST_NAME, updatedCurrency);
 
-    doReturn(Optional.of(product)).when(productService).findById(TEST_ID);
-    doReturn(updatedProduct).when(productService).save(any());
+    doReturn(Optional.of(updatedProduct)).when(productService).findById(TEST_ID);
 
     mockMvc
         .perform(

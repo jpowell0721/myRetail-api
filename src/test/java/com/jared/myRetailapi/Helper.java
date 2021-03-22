@@ -13,7 +13,7 @@ public class Helper {
   public static final String TEST_VALUE = "50";
 
   public static Product createMockProduct() {
-    CurrentPrice currentPrice = new CurrentPrice("50", "USD");
+    CurrentPrice currentPrice = new CurrentPrice(TEST_VALUE, TEST_CURRENCY_CODE);
 
     Product product = new Product(TEST_ID, TEST_NAME, currentPrice);
 

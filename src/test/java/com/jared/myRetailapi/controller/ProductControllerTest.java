@@ -5,6 +5,7 @@ import com.jared.myRetailapi.model.CurrentPrice;
 import com.jared.myRetailapi.model.Product;
 import com.jared.myRetailapi.service.ProductService;
 import com.jared.myRetailapi.service.RedSkyService;
+import com.sun.jna.platform.unix.X11.Display;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,7 +33,8 @@ import static org.hamcrest.Matchers.is;
 @SpringBootTest
 @AutoConfigureMockMvc
 class ProductControllerTest {
-  private String URI_TEMPLATE = "/api/v1/products/{id}";
+  private static String URI_TEMPLATE = "/api/v1/products/{id}";
+  private static String UPDATED_PRICE = "500";
 
   private Product product;
 
@@ -72,22 +74,38 @@ class ProductControllerTest {
   void testUpdateProductPrice_IdFound() throws Exception {
     product = createMockProduct();
 
-    CurrentPrice currency = new CurrentPrice("500", "USD");
+    CurrentPrice updatedCurrency = new CurrentPrice(UPDATED_PRICE, TEST_CURRENCY_CODE);
 
-    Product updatedProduct = new Product(TEST_ID, TEST_NAME, currency);
+    Product updatedProduct = new Product(TEST_ID, TEST_NAME, updatedCurrency);
 
     doReturn(Optional.of(product)).when(productService).findById(TEST_ID);
     doReturn(updatedProduct).when(productService).save(any());
 
     mockMvc
         .perform(
-            put("/api/v1/products/{id}", TEST_ID)
+            put(URI_TEMPLATE, TEST_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedProduct)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id", is(TEST_ID)))
         .andExpect(jsonPath("$.name", is(TEST_NAME)))
-        .andExpect(jsonPath("$.currentPrice.value", is("500")))
+        .andExpect(jsonPath("$.currentPrice.value", is(UPDATED_PRICE)))
         .andExpect(jsonPath("$.currentPrice.currency_code", is(TEST_CURRENCY_CODE)));
+  }
+
+  @Test
+  void testUpdateProductPrice_IdNotFound() throws Exception {
+    CurrentPrice updatedCurrency = new CurrentPrice(UPDATED_PRICE, TEST_CURRENCY_CODE);
+
+    Product updatedProduct = new Product(TEST_ID, TEST_NAME, updatedCurrency);
+
+    doReturn(Optional.empty()).when(productService).findById(TEST_ID);
+
+    mockMvc
+        .perform(
+            put(URI_TEMPLATE, TEST_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedProduct)))
+        .andExpect(status().isNotFound());
   }
 }
